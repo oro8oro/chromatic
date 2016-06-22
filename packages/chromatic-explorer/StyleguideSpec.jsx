@@ -36,6 +36,27 @@ StyleguideSpec = React.createClass({
     }
     return spec;
   },
+  componentDidMount() {
+    if(this.props.showControls)
+      this.loadGui()
+  },
+  componentWillReceiveProps() {
+    if(this.props.showControls)
+      this.loadGui()
+  },
+  componentWillUnmount() {
+    if(this.guiController)
+      this.guiController.remove()
+  },
+  loadGui() {
+    const entry = this.entry();
+    let self = this
+    this.newProps = {}
+    this.guiController = window.parent.loadGui(this.refComponent, function (obj) {
+      self.newProps = obj
+      self.forceUpdate()
+    })
+  },
   render() {
     const entry = this.entry();
     const spec = this.spec();
@@ -49,9 +70,13 @@ StyleguideSpec = React.createClass({
       props = _.isFunction(spec.props) ? spec.props() : spec.props;
     }
 
+    if(this.newProps)
+      for(i in this.newProps)
+        props[i] = this.newProps[i]
+
     if (entry) {
       return (
-        <entry.component {...props} />
+        <entry.component {...props} ref={(ref) => this.refComponent = ref}/>
       );
     }
     return null;

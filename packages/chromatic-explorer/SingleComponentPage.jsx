@@ -55,7 +55,7 @@ SingleComponentPage = React.createClass({
     const url = `${Meteor.absoluteUrl()}styleguide/_component/${entryName}/all`;
     const iframeContainer = (
       <div className={classnames('iframe-container', viewport)}>
-        <iframe onLoad={this.onIframeLoad} ref={this.getIframeRef} src={url}/>
+        <iframe id="iframeId" onLoad={this.onIframeLoad} ref={this.getIframeRef} src={url}/>
       </div>
     );
     const header = (
@@ -64,8 +64,13 @@ SingleComponentPage = React.createClass({
       onViewportClick={this.onViewportClick} onBackgroundChange={this.onBackgroundChange}/>
     );
     const sidebar = (
-      <SingleComponentPageSidebar entryName={entryName} specName={specName}
-        onSpecChange={this.onSpecChange}/>
+      <div>
+        <div id="my-gui-container"></div>
+        <SingleComponentPageSidebar entryName={entryName} specName={specName}
+        onSpecChange={this.onSpecChange}>
+
+        </SingleComponentPageSidebar>
+      </div>
     );
     const className = classnames('styleguide-content', {'full-width': isBrowser, 'iframe-loaded': iframeLoaded});
 
